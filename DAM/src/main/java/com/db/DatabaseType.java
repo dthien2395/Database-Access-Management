@@ -11,10 +11,6 @@ import java.util.List;
  */
 public interface DatabaseType {
 
-    public String getDriverUrlPart();
-
-    public String getDriverClassName();
-
     public void loadDriver() throws ClassNotFoundException;
 
     public void appendColumnArg(StringBuilder sb, FieldType fieldType, List<String> additionalArgs,
@@ -50,4 +46,15 @@ public interface DatabaseType {
     public boolean isCreateTableReturnsZero();
 
     public boolean isEntityNamesMustBeUpCase();
+
+    public boolean isDatabaseUrlThisType(String url, String dbTypePart);
+
+    public String getDatabaseName();
+
+    public boolean isTruncateSupported();
+
+    public boolean isCreateIfNotExistsSupported();
+
+    public boolean isCreateIndexIfNotExistsSupported();
+
 }
