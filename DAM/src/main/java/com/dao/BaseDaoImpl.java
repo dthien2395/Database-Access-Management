@@ -16,8 +16,9 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-
-
+/**
+ * Created by HienNguyen on 7/3/2017.
+ */
 public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 
 	private DatabaseType databaseType;
