@@ -1,6 +1,6 @@
 package com.MyDAM;
 
-import com.DatabaseConnection;
+import com.MyDatabaseConnection;
 import org.springframework.core.GenericTypeResolver;
 
 import javax.persistence.Column;
@@ -29,7 +29,7 @@ public class MySQLRepository<T, ID extends Serializable> implements Repository<T
     public List<T> findAll() {
         ResultSet rs = null;
         PreparedStatement pst = null;
-        Connection con = DatabaseConnection.getConnection();
+        Connection con = MyDatabaseConnection.getConnection();
         String table = genericType.getAnnotation(Table.class).name();
         String stm = "Select * from " + table;
         List<T> records = new ArrayList<T>();

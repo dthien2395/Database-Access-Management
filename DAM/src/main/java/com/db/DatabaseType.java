@@ -3,6 +3,7 @@ package com.db;
 import com.field.FieldConverter;
 import com.field.FieldType;
 
+import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
  * Created by dthien on 7/3/2017.
  */
 public interface DatabaseType {
+
+    public void setDriver(Driver driver);
 
     public void loadDriver() throws ClassNotFoundException;
 

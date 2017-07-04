@@ -15,13 +15,13 @@ public class BaseMySQLDatabaseType extends BaseDatabaseType  {
         if (fieldType.getDataType() != DataType.INTEGER && fieldType.getDataType() != DataType.INTEGER_OBJ) {
             throw new IllegalArgumentException("Sqlite requires that auto-increment generated-id be integer types");
         }
-        sb.append("PRIMARY KEY AUTOINCREMENT ");
+        sb.append("PRIMARY KEY AUTO_INCREMENT ");
         // no additional call to configureId here
     }
 
     @Override
     public boolean isVarcharFieldWidthSupported() {
-        return false;
+        return true;
     }
 
     @Override
@@ -103,5 +103,15 @@ public class BaseMySQLDatabaseType extends BaseDatabaseType  {
     @Override
     public boolean isCreateIndexIfNotExistsSupported() {
         return false;
+    }
+
+    @Override
+    public void appendEscapedWord(StringBuilder sb, String word) {
+        sb.append('\'').append(word).append('\'');
+    }
+
+    @Override
+    public void appendEscapedEntityName(StringBuilder sb, String word) {
+        sb.append(word);
     }
 }

@@ -4,6 +4,7 @@ import com.field.FieldConverter;
 import com.field.FieldType;
 import com.field.SqlType;
 
+import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -16,6 +17,7 @@ public abstract class BaseDatabaseType implements DatabaseType{
     protected static int DEFAULT_VARCHAR_WIDTH = 255;
     protected static int DEFAULT_DATE_STRING_WIDTH = 50;
     protected static String DEFAULT_SEQUENCE_SUFFIX = "_id_seq";
+    protected Driver driver;
 
     protected final static FieldConverter booleanConverter = new BooleanNumberFieldConverter();
 
@@ -31,6 +33,14 @@ public abstract class BaseDatabaseType implements DatabaseType{
             // this instantiates the driver class which wires in the JDBC glue
             Class.forName(className);
         }
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public String getDatabaseName() {
+        return null;
     }
 
     public void appendColumnArg(StringBuilder sb, FieldType fieldType, List<String> additionalArgs,

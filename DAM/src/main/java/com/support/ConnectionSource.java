@@ -1,5 +1,6 @@
 package com.support;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -13,6 +14,5 @@ public interface ConnectionSource {
 
     public void releaseConnection(DatabaseConnection connection) throws SQLException;
 
-
-    public void close() throws SQLException;
+    public void close() throws SQLException, IOException;
 }

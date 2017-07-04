@@ -14,14 +14,11 @@ public interface CompiledStatement {
 
     public String getColumnName(int column) throws SQLException;
 
-
     public int executeUpdate() throws SQLException;
 
     public ResultSet executeQuery() throws SQLException;
 
-
     public ResultSet getGeneratedKeys() throws SQLException;
-
 
     public void close() throws SQLException;
 

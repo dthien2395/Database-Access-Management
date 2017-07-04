@@ -1,5 +1,6 @@
 package com.table;
 
+import com.MyDatabaseConnection;
 import com.db.DatabaseType;
 import com.field.FieldType;
 import com.misc.SqlExceptionUtil;
@@ -7,6 +8,8 @@ import com.support.CompiledStatement;
 import com.support.ConnectionSource;
 import com.support.DatabaseConnection;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -67,6 +70,62 @@ public class TableUtils {
 			ResultSet results = null;
 			try {
 				prepStmt = connection.compileStatement(query);
+				results = prepStmt.executeQuery();
+				int rowC = 0;
+				// count the results
+				while (results.next()) {
+					rowC++;
+				}
+			} catch (SQLException e) {
+				// we do this to make sure that the statement is in the exception
+				throw SqlExceptionUtil.create("executing create table after-query failed: " + query, e);
+			} finally {
+				// result set is closed by the statement being closed
+				if (prepStmt != null) {
+					prepStmt.close();
+				}
+			}
+			stmtC++;
+		}
+		return stmtC;
+	}
+
+	public static <T> int createTable2(DatabaseType databaseType, Class<T> tClass) throws SQLException {
+		TableInfo<T> tableInfo = new TableInfo<T>(databaseType, DatabaseTableConfig.fromClass(databaseType, tClass));
+		List<String> statements = new ArrayList<String>();
+		List<String> queriesAfter = new ArrayList<String>();
+		createTableStatements(databaseType, tableInfo, statements, queriesAfter);
+		int stmtC = 0;
+		Connection connection = MyDatabaseConnection.getConnection();
+		for (String statement : statements) {
+			int rowC;
+			PreparedStatement prepStmt = null;
+			try {
+				prepStmt = connection.prepareStatement(statement);
+				rowC = prepStmt.executeUpdate();
+			} catch (SQLException e) {
+				// we do this to make sure that the statement is in the exception
+				throw SqlExceptionUtil.create("SQL statement failed: " + statement, e);
+			} finally {
+				if (prepStmt != null) {
+					prepStmt.close();
+				}
+			}
+			// sanity check
+			if (rowC < 0) {
+				throw new SQLException("SQL statement updated " + rowC + " rows, we were expecting >= 0: " + statement);
+			} else if (rowC > 0 && databaseType.isCreateTableReturnsZero()) {
+				throw new SQLException("SQL statement updated " + rowC + " rows, we were expecting == 0: " + statement);
+			}
+
+			stmtC++;
+		}
+		// now execute any test queries which test the newly created table
+		for (String query : queriesAfter) {
+			PreparedStatement prepStmt = null;
+			ResultSet results = null;
+			try {
+				prepStmt = connection.prepareStatement(query);
 				results = prepStmt.executeQuery();
 				int rowC = 0;
 				// count the results

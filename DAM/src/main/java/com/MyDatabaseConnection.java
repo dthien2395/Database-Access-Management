@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * Created by dthien on 6/30/2017.
  */
-public class DatabaseConnection {
+public class MyDatabaseConnection {
     private static Connection connection;
 
     public static Connection getConnection() {
@@ -24,7 +24,7 @@ public class DatabaseConnection {
 
         try {
             String filename = "application.properties";
-            input = DatabaseConnection.class.getClassLoader().getResourceAsStream(filename);
+            input = MyDatabaseConnection.class.getClassLoader().getResourceAsStream(filename);
             if (input == null) {
                 return null;
             }
