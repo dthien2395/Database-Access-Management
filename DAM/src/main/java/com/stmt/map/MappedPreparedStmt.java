@@ -8,7 +8,10 @@ import com.support.CompiledStatement;
 import com.support.DatabaseConnection;
 import com.table.TableInfo;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 /**
@@ -30,14 +33,15 @@ public class MappedPreparedStmt<T> extends BaseMappedQuery<T> implements Prepare
 		this.limit = limit;
 	}
 
-	public CompiledStatement compile(DatabaseConnection databaseConnection) throws SQLException {
-		CompiledStatement stmt = databaseConnection.compileStatement(statement);
+	public PreparedStatement compile(Connection connection) throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement(statement);
 		if (limit != null) {
 			stmt.setMaxRows(limit);
 		}
 		for (int i = 0; i < selectArgs.length; i++) {
 			Object arg = selectArgs[i].getValue();
 			// sql statement arguments start at 1
+			Types
 			if (arg == null) {
 				stmt.setNull(i + 1, argSqlTypes[i]);
 			} else {

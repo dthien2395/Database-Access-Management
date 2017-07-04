@@ -41,6 +41,5 @@ public interface DatabaseConnection {
 
     public long queryForLong(String statement) throws SQLException;
 
-
     public void close() throws SQLException;
 }

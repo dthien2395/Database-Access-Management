@@ -1,5 +1,6 @@
 package com.dao;
 
+import com.MyDatabaseConnection;
 import com.db.DatabaseType;
 import com.field.FieldType;
 import com.misc.SqlExceptionUtil;
@@ -7,11 +8,10 @@ import com.stmt.PreparedStmt;
 import com.stmt.SelectIterator;
 import com.stmt.StatementBuilder;
 import com.stmt.StatementExecutor;
-import com.support.ConnectionSource;
-import com.support.DatabaseConnection;
 import com.table.DatabaseTableConfig;
 import com.table.TableInfo;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 
 	private DatabaseType databaseType;
-	private ConnectionSource connectionSource;
+	private Connection connectionSource = MyDatabaseConnection.getConnection();
 
 	private final Class<T> dataClass;
 	private DatabaseTableConfig<T> tableConfig;
@@ -67,21 +67,11 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public T queryForId(ID id) throws SQLException {
-		DatabaseConnection connection = connectionSource.getReadOnlyConnection();
-		try {
-			return statementExecutor.queryForId(connection, id);
-		} finally {
-			connectionSource.releaseConnection(connection);
-		}
+		return statementExecutor.queryForId(connectionSource, id);
 	}
 
 	public T queryForFirst(PreparedStmt<T> preparedStmt) throws SQLException {
-		DatabaseConnection connection = connectionSource.getReadOnlyConnection();
-		try {
-			return statementExecutor.queryForFirst(connection, preparedStmt);
-		} finally {
-			connectionSource.releaseConnection(connection);
-		}
+		return statementExecutor.queryForFirst(connectionSource, preparedStmt);
 	}
 
 	public List<T> queryForAll() throws SQLException {
@@ -110,12 +100,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (data == null) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.create(connection, data);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.create(connectionSource, data);
 		}
 	}
 
@@ -124,12 +109,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (data == null) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.update(connection, data);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.update(connectionSource, data);
 		}
 	}
 
@@ -138,12 +118,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (data == null) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.updateId(connection, data, newId);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.updateId(connectionSource, data, newId);
 		}
 	}
 
@@ -152,12 +127,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (data == null) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadOnlyConnection();
-			try {
-				return statementExecutor.refresh(connection, data);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.refresh(connectionSource, data);
 		}
 	}
 
@@ -166,12 +136,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (data == null) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.delete(connection, data);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.delete(connectionSource, data);
 		}
 	}
 	public int delete(Collection<T> datas) throws SQLException {
@@ -179,12 +144,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (datas == null || datas.size() == 0) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.deleteObjects(connection, datas);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.deleteObjects(connectionSource, datas);
 		}
 	}
 
@@ -193,12 +153,7 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		if (ids == null || ids.size() == 0) {
 			return 0;
 		} else {
-			DatabaseConnection connection = connectionSource.getReadWriteConnection();
-			try {
-				return statementExecutor.deleteIds(connection, ids);
-			} finally {
-				connectionSource.releaseConnection(connection);
-			}
+			return statementExecutor.deleteIds(connectionSource, ids);
 		}
 	}
 
@@ -269,20 +224,15 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		this.databaseType = databaseType;
 	}
 
-	public void setConnectionSource(ConnectionSource connectionSource) {
-		this.connectionSource = connectionSource;
-	}
-
 	public void setTableConfig(DatabaseTableConfig<T> tableConfig) {
 		this.tableConfig = tableConfig;
 	}
 
 
-	public static <T, ID> Dao<T, ID> createDao(DatabaseType databaseType, ConnectionSource connectionSource,
+	public static <T, ID> Dao<T, ID> createDao(DatabaseType databaseType,
 			Class<T> clazz) throws SQLException {
 		BaseDaoImpl<T, ID> dao = new BaseDaoImpl<T, ID>(databaseType, clazz) {
 		};
-		dao.setConnectionSource(connectionSource);
 		dao.initialize();
 		return dao;
 	}

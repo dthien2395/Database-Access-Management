@@ -8,6 +8,7 @@ import com.support.DatabaseConnection;
 import com.table.TableInfo;
 
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public abstract class BaseMappedStatement<T> {
 	protected final FieldType idField;
 	protected final String statement;
 	protected final FieldType[] argFieldTypes;
-	protected final SqlType[] argSqlTypes;
+	protected final Types[] argSqlTypes;
 
 	protected BaseMappedStatement(TableInfo<T> tableInfo, String statement, List<FieldType> argFieldTypeList) {
 		this.tableInfo = tableInfo;
@@ -104,8 +105,8 @@ public abstract class BaseMappedStatement<T> {
 		sb.append(' ');
 	}
 
-	private SqlType[] getSqlTypes(FieldType[] fieldTypes) {
-		SqlType[] typeVals = new SqlType[fieldTypes.length];
+	private Types[] getSqlTypes(FieldType[] fieldTypes) {
+		Types[] typeVals = new Types[fieldTypes.length];
 		for (int i = 0; i < fieldTypes.length; i++) {
 			typeVals[i] = fieldTypes[i].getSqlTypeVal();
 		}

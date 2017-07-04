@@ -3,6 +3,7 @@ package com.stmt;
 import com.support.CompiledStatement;
 import com.support.DatabaseConnection;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -10,8 +11,7 @@ import java.sql.SQLException;
  */
 public interface PreparedStmt<T> extends GenericRowMapper<T> {
 
-
-	public CompiledStatement compile(DatabaseConnection databaseConnection) throws SQLException;
+	public PreparedStatement compile(DatabaseConnection databaseConnection) throws SQLException;
 
 	public String getStatement() throws SQLException;
 }

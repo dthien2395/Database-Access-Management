@@ -11,6 +11,7 @@ import com.support.ConnectionSource;
 import com.support.DatabaseConnection;
 import com.table.TableInfo;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -84,12 +85,12 @@ public class StatementExecutor<T, ID> {
 	}
 
 
-	public List<T> queryForAll(ConnectionSource connectionSource) throws SQLException {
-		return query(connectionSource, preparedQueryForAll);
+	public List<T> queryForAll(Connection connection) throws SQLException {
+		return query(connection, preparedQueryForAll);
 	}
 
 
-	public List<T> query(ConnectionSource connectionSource, PreparedStmt<T> preparedStmt) throws SQLException {
+	public List<T> query(Connection connectionSource, PreparedStmt<T> preparedStmt) throws SQLException {
 		SelectIterator<T, ID> iterator = null;
 		try {
 			iterator = buildIterator(/* no dao specified because no removes */null, connectionSource, preparedStmt);
@@ -137,10 +138,9 @@ public class StatementExecutor<T, ID> {
 	/**
 	 * Create and return an {@link SelectIterator} for the class using a prepared statement.
 	 */
-	public SelectIterator<T, ID> buildIterator(BaseDaoImpl<T, ID> classDao, ConnectionSource connectionSource,
+	public SelectIterator<T, ID> buildIterator(BaseDaoImpl<T, ID> classDao, Connection connection,
 			PreparedStmt<T> preparedStmt) throws SQLException {
-		DatabaseConnection connection = connectionSource.getReadOnlyConnection();
-		return new SelectIterator<T, ID>(dataClass, classDao, preparedStmt, connectionSource, connection,
+		return new SelectIterator<T, ID>(dataClass, classDao, preparedStmt, connection,
 				preparedStmt.compile(connection), preparedStmt.getStatement());
 	}
 
