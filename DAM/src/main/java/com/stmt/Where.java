@@ -24,17 +24,11 @@ public class Where {
 		this.tableInfo = tableInfo;
 	}
 
-	/**
-	 * AND operation which takes the previous clause and the next clause and AND's them together.
-	 */
 	public Where and() {
 		addNeedsFuture(new And(removeLastClause("AND")));
 		return this;
 	}
 
-	/**
-	 * AND operation which takes 2 arguments and AND's them together.
-	 */
 	public Where and(Where left, Where right) {
 		Clause rightClause = removeLastClause("AND");
 		Clause leftClause = removeLastClause("AND");
@@ -42,49 +36,32 @@ public class Where {
 		return this;
 	}
 
-	/**
-	 * Add a BETWEEN clause so the column must be between the low and high parameters.
-	 */
 	public Where between(String columnName, Object low, Object high) throws SQLException {
 		addClause(new Between(columnName, checkIfColumnIsNumber(columnName), low, high));
 		return this;
 	}
 
-	/**
-	 * Add a '=' clause so the column must be equal to the value.
-	 */
 	public Where eq(String columnName, Object value) throws SQLException {
 		addClause(new Eq(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a '&gt;=' clause so the column must be greater-than or equals-to the value.
-	 */
+
 	public Where ge(String columnName, Object value) throws SQLException {
 		addClause(new Ge(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a '&gt;' clause so the column must be greater-than the value.
-	 */
 	public Where gt(String columnName, Object value) throws SQLException {
 		addClause(new Gt(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a IN clause so the column must be equal-to one of the objects from the list passed in.
-	 */
 	public Where in(String columnName, Iterable<?> objects) throws SQLException {
 		addClause(new In(columnName, checkIfColumnIsNumber(columnName), objects));
 		return this;
 	}
 
-	/**
-	 * Add a IN clause so the column must be equal-to one of the objects passed in.
-	 */
 	public Where in(String columnName, Object... objects) throws SQLException {
 		if (objects.length == 1 && objects[0].getClass().isArray()) {
 			throw new IllegalArgumentException("in(Object... objects) seems to be an array within an array");
@@ -93,81 +70,51 @@ public class Where {
 		return this;
 	}
 
-	/**
-	 * Add a 'IS NULL' clause so the column must be null. '=' NULL does not work.
-	 */
 	public Where isNull(String columnName) throws SQLException {
 		addClause(new IsNull(columnName, checkIfColumnIsNumber(columnName)));
 		return this;
 	}
 
-	/**
-	 * Add a 'IS NOT NULL' clause so the column must not be null. '<>' NULL does not work.
-	 */
 	public Where isNotNull(String columnName) throws SQLException {
 		addClause(new IsNotNull(columnName, checkIfColumnIsNumber(columnName)));
 		return this;
 	}
 
-	/**
-	 * Add a '&lt;=' clause so the column must be less-than or equals-to the value.
-	 */
 	public Where le(String columnName, Object value) throws SQLException {
 		addClause(new Le(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a '&lt;' clause so the column must be less-than the value.
-	 */
 	public Where lt(String columnName, Object value) throws SQLException {
 		addClause(new Lt(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a LIKE clause so the column must be like the value (where you can specify '%' patterns.
-	 */
 	public Where like(String columnName, Object value) throws SQLException {
 		addClause(new Like(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Add a '&lt;&gt;' clause so the column must be not-equal-to the value.
-	 */
 	public Where ne(String columnName, Object value) throws SQLException {
 		addClause(new Ne(columnName, checkIfColumnIsNumber(columnName), value));
 		return this;
 	}
 
-	/**
-	 * Used to NOT the next clause specified.
-	 */
 	public Where not() {
 		addNeedsFuture(new Not());
 		return this;
 	}
 
-	/**
-	 * Used to NOT the argument clause specified.
-	 */
 	public Where not(Where comparison) {
 		addClause(new Not(removeLastClause("NOT")));
 		return this;
 	}
 
-	/**
-	 * OR operation which takes the previous clause and the next clause and OR's them together.
-	 */
 	public Where or() {
 		addNeedsFuture(new Or(removeLastClause("OR")));
 		return this;
 	}
 
-	/**
-	 * OR operation which takes 2 arguments and OR's them together.
-	 */
 	public Where or(Where left, Where right) {
 		Clause rightClause = removeLastClause("OR");
 		Clause leftClause = removeLastClause("OR");
@@ -175,9 +122,6 @@ public class Where {
 		return this;
 	}
 
-	/**
-	 * Used by the internal classes to add the where SQL to the {@link StringBuilder}.
-	 */
 	void appendSql(DatabaseType databaseType, StringBuilder sb, List<SelectArg> columnArgList) {
 		if (clauseList.isEmpty()) {
 			throw new IllegalStateException("No where clauses defined.  Did you miss a where operation?");
@@ -240,9 +184,6 @@ public class Where {
 		}
 	}
 
-	/**
-	 * Little inner class to provide stack features. The java.util.Stack extends Vector which is synchronized.
-	 */
 	private class SimpleStack<T> extends ArrayList<T> {
 		private static final long serialVersionUID = -8116427380277806666L;
 

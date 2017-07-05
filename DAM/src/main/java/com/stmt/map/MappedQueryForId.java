@@ -25,9 +25,6 @@ public class MappedQueryForId<T, ID> extends BaseMappedQuery<T> {
 		this.label = label;
 	}
 
-	/**
-	 * Query for an object in the database which matches the obj argument.
-	 */
 	public T execute(DatabaseConnection databaseConnection, Object obj) throws SQLException {
 		Object[] args = new Object[] { getId(obj) };
 		// @SuppressWarnings("unchecked")
@@ -39,18 +36,12 @@ public class MappedQueryForId<T, ID> extends BaseMappedQuery<T> {
 		return castResult;
 	}
 
-	/**
-	 * Return the ID from the object passed to execute.
-	 */
 	protected ID getId(Object obj) throws SQLException {
 		@SuppressWarnings("unchecked")
 		ID id = (ID) obj;
 		return id;
 	}
 
-	/**
-	 * Post process the result returned by the execute method.
-	 */
 	protected void postProcessResult(Object obj, T result) throws SQLException {
 		// noop
 	}

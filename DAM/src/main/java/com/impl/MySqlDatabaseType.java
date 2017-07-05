@@ -14,9 +14,6 @@ public class MySqlDatabaseType extends BaseDatabaseType implements DatabaseType 
     private final static String DATABASE_URL_PORTION = "mysql";
     private final static String DRIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
-    /**
-     * Default suffix to the CREATE TABLE statement. Change with the {@link #setCreateTableSuffix} method.
-     */
     public final static String DEFAULT_CREATE_TABLE_SUFFIX = "ENGINE=InnoDB";
 
     private String createTableSuffix = DEFAULT_CREATE_TABLE_SUFFIX;
@@ -29,19 +26,12 @@ public class MySqlDatabaseType extends BaseDatabaseType implements DatabaseType 
         return DRIVER_CLASS_NAME;
     }
 
-    /**
-     * Set the string that is appended to the end of a CREATE TABLE statement.
-     */
     public void setCreateTableSuffix(String createTableSuffix) {
         this.createTableSuffix = createTableSuffix;
     }
 
     @Override
     protected void appendDateType(StringBuilder sb, int fieldWidth) {
-        /**
-         * TIMESTAMP in MySQL does some funky stuff with the last-modification time. Values are 'not null' by default
-         * with an automatic default of CURRENT_TIMESTAMP. Strange design decision.
-         */
         sb.append("DATETIME");
     }
 

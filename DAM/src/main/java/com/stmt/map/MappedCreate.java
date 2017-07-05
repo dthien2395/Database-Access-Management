@@ -26,9 +26,6 @@ public class MappedCreate<T> extends BaseMappedStatement<T> {
 		this.queryNextSequenceStmt = queryNextSequenceStmt;
 	}
 
-	/**
-	 * Create an object in the database.
-	 */
 	@Override
 	public int insert(DatabaseConnection databaseConnection, T data) throws SQLException {
 		if (idField != null) {

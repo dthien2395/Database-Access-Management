@@ -92,7 +92,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		return new StatementBuilder<T, ID>(databaseType, tableInfo);
 	}
 
-	@Deprecated
 	public StatementBuilder<T, ID> queryBuilder() {
 		return statementBuilder();
 	}
@@ -106,7 +105,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int create(T data) throws SQLException {
-		// ignore creating a null object
 		if (data == null) {
 			return 0;
 		} else {
@@ -120,7 +118,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int update(T data) throws SQLException {
-		// ignore updating a null object
 		if (data == null) {
 			return 0;
 		} else {
@@ -134,7 +131,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int updateId(T data, ID newId) throws SQLException {
-		// ignore updating a null object
 		if (data == null) {
 			return 0;
 		} else {
@@ -148,7 +144,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int refresh(T data) throws SQLException {
-		// ignore refreshing a null object
 		if (data == null) {
 			return 0;
 		} else {
@@ -162,7 +157,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int delete(T data) throws SQLException {
-		// ignore deleting a null object
 		if (data == null) {
 			return 0;
 		} else {
@@ -175,7 +169,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		}
 	}
 	public int delete(Collection<T> datas) throws SQLException {
-		// ignore deleting a null object
 		if (datas == null || datas.size() == 0) {
 			return 0;
 		} else {
@@ -189,7 +182,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	}
 
 	public int deleteIds(Collection<ID> ids) throws SQLException {
-		// ignore deleting a null object
 		if (ids == null || ids.size() == 0) {
 			return 0;
 		} else {
@@ -247,24 +239,14 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 		return true;
 	}
 
-	/**
-	 * Returns the class associated with this DAO.
-	 */
 	public Class<T> getDataClass() {
 		return dataClass;
 	}
 
-	/**
-	 * Returns the table configuration information associated with the Dao's class.
-	 */
 	public DatabaseTableConfig<T> getTableConfig() {
 		return tableConfig;
 	}
 
-	/**
-	 * Used if you want to wire the Dao with spring. In java you should use the
-	 * {@link #BaseDaoImpl(DatabaseType, Class)} constructor. This must be called <i>before</i> {@link #initialize}.
-	 */
 	public void setDatabaseType(DatabaseType databaseType) {
 		this.databaseType = databaseType;
 	}
@@ -276,7 +258,6 @@ public abstract class BaseDaoImpl<T, ID> implements Dao<T, ID> {
 	public void setTableConfig(DatabaseTableConfig<T> tableConfig) {
 		this.tableConfig = tableConfig;
 	}
-
 
 	public static <T, ID> Dao<T, ID> createDao(DatabaseType databaseType, ConnectionSource connectionSource,
 			Class<T> clazz) throws SQLException {

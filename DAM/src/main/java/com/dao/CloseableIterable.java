@@ -5,10 +5,5 @@ package com.dao;
  */
 public interface CloseableIterable<T> extends Iterable<T> {
 
-	/**
-	 * Returns an iterator over a set of elements of type T.
-	 * 
-	 * @return an CloseableIterator.
-	 */
 	public CloseableIterator<T> iterator();
 }

@@ -39,9 +39,6 @@ public abstract class BaseMappedStatement<T> {
 		}
 	}
 
-	/**
-	 * Update the object in the database.
-	 */
 	public int update(DatabaseConnection databaseConnection, T data) throws SQLException {
 		try {
 			Object[] args = getFieldObjects(argFieldTypes, data);
@@ -52,9 +49,6 @@ public abstract class BaseMappedStatement<T> {
 		}
 	}
 
-	/**
-	 * Delete the object from the database.
-	 */
 	public int delete(DatabaseConnection databaseConnection, T data) throws SQLException {
 		try {
 			Object[] args = getFieldObjects(argFieldTypes, data);
@@ -65,9 +59,6 @@ public abstract class BaseMappedStatement<T> {
 		}
 	}
 
-	/**
-	 * Return the array of field objects pulled from the data object.
-	 */
 	protected Object[] getFieldObjects(FieldType[] fieldTypes, Object data) throws SQLException {
 		Object[] objects = new Object[fieldTypes.length];
 		for (int i = 0; i < fieldTypes.length; i++) {

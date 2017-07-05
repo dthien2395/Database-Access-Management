@@ -8,8 +8,5 @@ import java.util.Iterator;
  */
 public interface CloseableIterator<T> extends Iterator<T> {
 
-	/**
-	 * Close any underlying SQL statements.
-	 */
 	public void close() throws SQLException;
 }

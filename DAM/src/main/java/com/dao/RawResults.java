@@ -5,13 +5,7 @@ package com.dao;
  */
 public interface RawResults extends CloseableIterable<String[]> {
 
-	/**
-	 * Return the number of columns in each result row.
-	 */
 	public int getNumberColumns();
 
-	/**
-	 * Return the array of column names for each result row.
-	 */
 	public String[] getColumnNames();
 }

@@ -36,9 +36,6 @@ public class StatementExecutor<T, ID> {
 	private final MappedDelete<T> mappedDelete;
 	private final MappedRefresh<T, ID> mappedRefresh;
 
-	/**
-	 * Provides statements for various SQL operations.
-	 */
 	public StatementExecutor(DatabaseType databaseType, TableInfo<T> tableInfo) throws SQLException {
 		this.databaseType = databaseType;
 		this.tableInfo = tableInfo;
@@ -53,10 +50,6 @@ public class StatementExecutor<T, ID> {
 		this.mappedRefresh = MappedRefresh.build(databaseType, tableInfo);
 	}
 
-	/**
-	 * Return the object associated with the id or null if none. This does a SQL
-	 * <tt>select col1,col2,... from ... where ... = id</tt> type query.
-	 */
 	public T queryForId(DatabaseConnection databaseConnection, ID id) throws SQLException {
 		if (mappedQueryForId == null) {
 			throw new SQLException("Cannot query-for-id with " + dataClass + " because it doesn't have an id field");
@@ -64,9 +57,6 @@ public class StatementExecutor<T, ID> {
 		return mappedQueryForId.execute(databaseConnection, id);
 	}
 
-	/**
-	 * Return the first object that matches the {@link PreparedStmt} or null if none.
-	 */
 	public T queryForFirst(DatabaseConnection databaseConnection, PreparedStmt<T> preparedStmt) throws SQLException {
 		CompiledStatement stmt = null;
 		try {
@@ -127,17 +117,12 @@ public class StatementExecutor<T, ID> {
 			}
 		}
 	}
-	/**
-	 * Create and return a SelectIterator for the class using the default mapped query for all statement.
-	 */
+
 	public SelectIterator<T, ID> buildIterator(BaseDaoImpl<T, ID> classDao, ConnectionSource connectionSource)
 			throws SQLException {
 		return buildIterator(classDao, connectionSource, preparedQueryForAll);
 	}
 
-	/**
-	 * Create and return an {@link SelectIterator} for the class using a prepared statement.
-	 */
 	public SelectIterator<T, ID> buildIterator(BaseDaoImpl<T, ID> classDao, ConnectionSource connectionSource,
 			PreparedStmt<T> preparedStmt) throws SQLException {
 		DatabaseConnection connection = connectionSource.getReadOnlyConnection();
@@ -145,24 +130,16 @@ public class StatementExecutor<T, ID> {
 				preparedStmt.compile(connection), preparedStmt.getStatement());
 	}
 
-	/**
-	 * Return a RawResults object associated with an internal iterator that matches the query argument.
-	 */
 	public RawResults buildIterator(ConnectionSource connectionSource, String query) throws SQLException {
 		DatabaseConnection connection = connectionSource.getReadOnlyConnection();
 		return new RawResultsIterator(query, connectionSource, connection, connection.compileStatement(query));
 	}
 
-	/**
-	 * Create a new entry in the database from an object.
-	 */
+
 	public int create(DatabaseConnection databaseConnection, T data) throws SQLException {
 		return mappedInsert.insert(databaseConnection, data);
 	}
 
-	/**
-	 * Update an object in the database.
-	 */
 	public int update(DatabaseConnection databaseConnection, T data) throws SQLException {
 		if (mappedUpdate == null) {
 			throw new SQLException("Cannot update " + dataClass
@@ -172,9 +149,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Update an object in the database to change its id to the newId parameter.
-	 */
 	public int updateId(DatabaseConnection databaseConnection, T data, ID newId) throws SQLException {
 		if (mappedUpdateId == null) {
 			throw new SQLException("Cannot update " + dataClass + " because it doesn't have an id field defined");
@@ -183,10 +157,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Does a query for the object's Id and copies in each of the field values from the database to refresh the data
-	 * parameter.
-	 */
 	public int refresh(DatabaseConnection databaseConnection, T data) throws SQLException {
 		if (mappedQueryForId == null) {
 			throw new SQLException("Cannot refresh " + dataClass + " because it doesn't have an id field defined");
@@ -200,9 +170,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Delete an object from the database.
-	 */
 	public int delete(DatabaseConnection databaseConnection, T data) throws SQLException {
 		if (mappedDelete == null) {
 			throw new SQLException("Cannot delete " + dataClass + " because it doesn't have an id field defined");
@@ -211,9 +178,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Delete a collection of objects from the database.
-	 */
 	public int deleteObjects(DatabaseConnection databaseConnection, Collection<T> datas) throws SQLException {
 		if (idField == null) {
 			throw new SQLException("Cannot delete " + dataClass + " because it doesn't have an id field defined");
@@ -223,9 +187,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Delete a collection of objects from the database.
-	 */
 	public int deleteIds(DatabaseConnection databaseConnection, Collection<ID> ids) throws SQLException {
 		if (idField == null) {
 			throw new SQLException("Cannot delete " + dataClass + " because it doesn't have an id field defined");
@@ -235,9 +196,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Base class for raw results objects. It is also a row mapper to save on another object.
-	 */
 	private abstract static class BaseRawResults implements RawResults, GenericRowMapper<String[]> {
 
 		protected final int columnN;
@@ -259,9 +217,6 @@ public class StatementExecutor<T, ID> {
 			return columnNames;
 		}
 
-		/**
-		 * Row mapper which handles our String[] raw results.
-		 */
 		public String[] mapRow(DatabaseResults rs) throws SQLException {
 			String[] result = new String[columnN];
 			for (int colC = 0; colC < columnN; colC++) {
@@ -271,9 +226,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Raw results from a list of results.
-	 */
 	private static class RawResultsList extends BaseRawResults {
 
 		private final List<String[]> results = new ArrayList<String[]>();
@@ -294,9 +246,6 @@ public class StatementExecutor<T, ID> {
 			return new RawResultsListIterator();
 		}
 
-		/**
-		 * Internal iterator to work on our list.
-		 */
 		private class RawResultsListIterator implements CloseableIterator<String[]> {
 
 			private int resultC = 0;
@@ -319,9 +268,6 @@ public class StatementExecutor<T, ID> {
 		}
 	}
 
-	/**
-	 * Raw results from an iterator.
-	 */
 	private static class RawResultsIterator extends BaseRawResults {
 
 		private final CompiledStatement statement;

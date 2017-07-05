@@ -17,19 +17,9 @@ public class DatabaseTypeUtils {
         databaseTypes.add(new BaseMySQLDatabaseType());
     }
 
-    /**
-     * For static methods only.
-     */
     private DatabaseTypeUtils() {
     }
 
-    /**
-     * Creates and returns a {@link DatabaseType} for the database URL.
-     *
-     * @throws IllegalArgumentException
-     *             if the url format is not recognized, the database type is unknown, or the class could not be
-     *             constructed.
-     */
     public static DatabaseType createDatabaseType(String databaseUrl) {
         String dbTypePart = extractDbType(databaseUrl);
         for (DatabaseType databaseType : databaseTypes) {

@@ -55,19 +55,12 @@ public class BaseMySQLDatabaseType extends BaseDatabaseType  {
         return DATABASE_NAME;
     }
 
-    /**
-     * Set the string that is appended to the end of a CREATE TABLE statement.
-     */
     public void setCreateTableSuffix(String createTableSuffix) {
         this.createTableSuffix = createTableSuffix;
     }
 
     @Override
     protected void appendDateType(StringBuilder sb, FieldType fieldType, int fieldWidth) {
-        /**
-         * TIMESTAMP in MySQL does some funky stuff with the last-modification time. Values are 'not null' by default
-         * with an automatic default of CURRENT_TIMESTAMP. Strange design decision.
-         */
         sb.append("DATETIME");
     }
 

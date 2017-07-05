@@ -18,7 +18,6 @@ import java.util.Map;
 public abstract class BaseMappedQuery<T> extends BaseMappedStatement<T> implements GenericRowMapper<T> {
 
 	protected final FieldType[] resultsFieldTypes;
-	// cache of column names to results position
 	private final Map<String, Integer> columnPositions = new HashMap<String, Integer>();
 
 	protected BaseMappedQuery(TableInfo<T> tableInfo, String statement, List<FieldType> argFieldTypeList,
@@ -28,9 +27,7 @@ public abstract class BaseMappedQuery<T> extends BaseMappedStatement<T> implemen
 	}
 
 	public T mapRow(DatabaseResults results) throws SQLException {
-		// create our instance
 		T instance = tableInfo.createObject();
-		// populate its fields
 		for (FieldType fieldType : resultsFieldTypes) {
 			Object val = fieldType.resultToJava(results, columnPositions);
 			fieldType.assignField(instance, val);

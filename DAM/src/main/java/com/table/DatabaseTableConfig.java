@@ -63,9 +63,6 @@ public class DatabaseTableConfig<T> {
         return tableName;
     }
 
-    /**
-     * Set the table name which is turned into lowercase. If not specified then the name is gotten from the class name.
-     */
     public void setTableName(String tableName) {
         this.tableName = tableName.toLowerCase();
     }

@@ -162,9 +162,6 @@ public class JdbcDatabaseConnection implements DatabaseConnection{
         }
     }
 
-    /**
-     * Row mapper that handles a single long result.
-     */
     private static class OneLongWrapper implements GenericRowMapper<Long> {
         public Long mapRow(DatabaseResults rs) throws SQLException {
             // maps the first column (sql #1)

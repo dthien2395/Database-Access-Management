@@ -19,7 +19,6 @@ import java.util.Map;
 public class FieldType {
 
 
-    /** default suffix added to fields that are id fields of foreign objects */
     public static final String FOREIGN_ID_FIELD_SUFFIX = "_id";
 
     private final Field field;
@@ -42,9 +41,6 @@ public class FieldType {
     private final boolean throwIfNull;
     private final String format;
 
-    /**
-     * You should use {@link FieldType#createFieldType} to instantiate one of these field if you have a {@link Field}.
-     */
     public FieldType(DatabaseType databaseType, String tableName, Field field, DatabaseFieldConfig fieldConfig)
             throws SQLException {
         this.field = field;
@@ -170,122 +166,66 @@ public class FieldType {
         }
     }
 
-    /**
-     * Return the column name either specified my {@link DatabaseField#columnName} or from {@link Field#getName}.
-     */
     public String getFieldName() {
         return fieldName;
     }
 
-    /**
-     * Return the column name either specified my {@link DatabaseField#columnName} or from {@link Field#getName}.
-     */
     public String getDbColumnName() {
         return dbColumnName;
     }
 
-    /**
-     * Return the DataType associated with this.
-     */
     public DataType getDataType() {
         return dataType;
     }
 
-    /**
-     * Return the SQL type value.
-     */
     public SqlType getSqlTypeVal() {
         return fieldConverter.getSqlType();
     }
 
-    /**
-     * Return the default value configured by {@link DatabaseField#defaultValue} or null if none.
-     */
     public Object getDefaultValue() {
         return defaultValue;
     }
 
-    /**
-     * Return the width of the field as configured by {@link DatabaseField#width}.
-     */
     public int getWidth() {
         return width;
     }
 
-    /**
-     * Return whether the field can be assigned to null as configured by {@link DatabaseField#canBeNull}.
-     */
     public boolean isCanBeNull() {
         return canBeNull;
     }
 
-    /**
-     * Return whether the field is an id field. It is an id if {@link DatabaseField#id},
-     * {@link DatabaseField#generatedId}, OR {@link DatabaseField#generatedIdSequence} are enabled.
-     */
     public boolean isId() {
         return isId;
     }
 
-    /**
-     * Return whether the field is a generated-id field. This is true if {@link DatabaseField#generatedId} OR
-     * {@link DatabaseField#generatedIdSequence} are enabled.
-     */
     public boolean isGeneratedId() {
         return isGeneratedId;
     }
 
-    /**
-     * Return whether the field is a generated-id-sequence field. This is true if
-     * {@link DatabaseField#generatedIdSequence} is specified OR if {@link DatabaseField#generatedId} is enabled and the
-     * {@link DatabaseType#isIdSequenceNeeded} is enabled. If the latter is true then the sequence name will be
-     * auto-generated.
-     */
     public boolean isGeneratedIdSequence() {
         return generatedIdSequence != null;
     }
 
-    /**
-     * Return the generated-id-sequence associated with the field or null if {@link #isGeneratedIdSequence} is false.
-     */
     public String getGeneratedIdSequence() {
         return generatedIdSequence;
     }
 
-    /**
-     * Return whether or not the field is a foreign object field.
-     */
     public boolean isForeign() {
         return foreignTableInfo != null;
     }
 
-    /**
-     * Return the {@link TableInfo} associated with the foreign object if the {@link DatabaseField#foreign()} annotation
-     * was set to true or null if none.
-     */
     public TableInfo<?> getForeignTableInfo() {
         return foreignTableInfo;
     }
 
-    /**
-     * Assign to the data object the val corresponding to the fieldType.
-     */
     public void assignField(Object data, Object val) throws SQLException {
-        // if this is a foreign object then val is the foreign object's id val
         if (foreignTableInfo != null) {
             Object foreignId = getConvertedFieldValue(data);
-			/*
-			 * See if we don't need to create a new foreign object. If we are refreshing and the id field has not
-			 * changed then there is no need to create a new foreign object and maybe lose previously refreshed field
-			 * information.
-			 */
             if (foreignId != null && foreignId.equals(val)) {
                 return;
             }
             Object foreignObject = foreignTableInfo.createObject();
-            // assign the val to its id field
             foreignTableInfo.getIdField().assignField(foreignObject, val);
-            // the value we are to assign to our field is now the foreign object itself
             val = foreignObject;
         }
 
@@ -314,9 +254,6 @@ public class FieldType {
         }
     }
 
-    /**
-     * Assign an ID value to this field.
-     */
     public Object assignIdValue(Object data, Number val) throws SQLException {
         Object idVal = dataType.convertIdNumber(val);
         if (idVal == null) {
@@ -328,9 +265,6 @@ public class FieldType {
         }
     }
 
-    /**
-     * Return the value from the field in the object that is defined by this FieldType.
-     */
     public <FV> FV getFieldValue(Object object) throws SQLException {
         Object val;
         if (fieldGetMethod == null) {
@@ -370,10 +304,6 @@ public class FieldType {
         return converted;
     }
 
-    /**
-     * Return the value from the field in the object after it has been converted to something suitable to be stored in
-     * the database.
-     */
     public <FV> FV getConvertedFieldValue(Object object) throws SQLException {
         Object val = getFieldValue(object);
         if (val == null) {
@@ -386,30 +316,18 @@ public class FieldType {
         }
     }
 
-    /**
-     * Return whether this field is a number.
-     */
     public boolean isNumber() {
         return dataType.isNumber();
     }
 
-    /**
-     * Return the format of the field.
-     */
     public String getFormat() {
         return format;
     }
 
-    /**
-     * Return whether this field's default value should be escaped in SQL.
-     */
     public boolean isEscapeDefaultValue() {
         return dataType.isEscapeDefaultValue();
     }
 
-    /**
-     * Get the result object from the results. A call through to {@link FieldConverter#resultToJava}.
-     */
     public <T> T resultToJava(DatabaseResults results, Map<String, Integer> columnPositions) throws SQLException {
         Integer dbColumnPos = columnPositions.get(dbColumnName);
         if (dbColumnPos == null) {
@@ -430,25 +348,16 @@ public class FieldType {
         return converted;
     }
 
-    /**
-     * Get the Enum associated with the integer value.
-     */
     public Enum<?> enumFromInt(int val) throws SQLException {
         // just do this once
         Integer integerVal = new Integer(val);
         return enumVal(integerVal, enumValueMap.get(integerVal));
     }
 
-    /**
-     * Get the Enum associated with the String value.
-     */
     public Enum<?> enumFromString(String val) throws SQLException {
         return enumVal(val, enumStringMap.get(val));
     }
 
-    /**
-     * Return An instantiated {@link FieldType} or null if the field does not have a {@link DatabaseField} annotation.
-     */
     public static FieldType createFieldType(DatabaseType databaseType, String tableName, Field field)
             throws SQLException {
         DatabaseFieldConfig fieldConfig = DatabaseFieldConfig.fromField(databaseType, field);

@@ -19,9 +19,6 @@ public class MappedUpdateId<T, ID> extends BaseMappedStatement<T> {
 		super(tableInfo, statement, argFieldTypeList);
 	}
 
-	/**
-	 * Update the id field of the object in the database.
-	 */
 	public int execute(DatabaseConnection databaseConnection, T data, ID newId) throws SQLException {
 		Object[] fieldObjects = getFieldObjects(argFieldTypes, data);
 		try {

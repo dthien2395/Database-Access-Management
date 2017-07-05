@@ -77,9 +77,6 @@ public class TypeValMapper {
         }
     }
 
-    /**
-     * Returns the primary type value associated with the SqlType argument.
-     */
     public static int getTypeValForSqlType(SqlType sqlType) throws SQLException {
         Integer[] typeVals = typeToValMap.get(sqlType);
         if (typeVals.length == 0) {
@@ -88,16 +85,10 @@ public class TypeValMapper {
         return typeVals[0];
     }
 
-    /**
-     * Return the SqlType associated with the JDBC type value or null if none.
-     */
     public static SqlType getSqlTypeForTypeVal(int typeVal) {
         return valToTypeMap.get(typeVal);
     }
 
-    /**
-     * Return the SqlType associated with the JDBC type value or null if none.
-     */
     public static DataType getDataTypeForIdTypeVal(int typeVal) {
         return idValToDataTypeMap.get(typeVal);
     }

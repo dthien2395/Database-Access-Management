@@ -20,26 +20,10 @@ public class TableInfo<T> {
     private final FieldType idField;
     private final Constructor<T> constructor;
 
-    /**
-     * Creates a holder of information about a table/class.
-     *
-     * @param databaseType
-     *            Database type we are storing the class in.
-     * @param dataClass
-     *            Class that we are holding information about.
-     */
     public TableInfo(DatabaseType databaseType, Class<T> dataClass) throws SQLException {
         this(databaseType, DatabaseTableConfig.fromClass(databaseType, dataClass));
     }
 
-    /**
-     * Creates a holder of information about a table/class.
-     *
-     * @param databaseType
-     *            Database type we are storing the class in.
-     * @param tableConfig
-     *            Configuration for our table.
-     */
     public TableInfo(DatabaseType databaseType, DatabaseTableConfig<T> tableConfig) throws SQLException {
         this.dataClass = tableConfig.getDataClass();
         this.tableName = tableConfig.getTableName();
@@ -66,44 +50,27 @@ public class TableInfo<T> {
         this.constructor = findNoArgConstructor(dataClass);
     }
 
-    /**
-     * Return the class associated with this object-info.
-     */
+
     public Class<T> getDataClass() {
         return dataClass;
     }
 
-    /**
-     * Return the name of the table associated with the object.
-     */
     public String getTableName() {
         return tableName;
     }
 
-    /**
-     * Return the array of field types associated with the object.
-     */
     public FieldType[] getFieldTypes() {
         return fieldTypes;
     }
 
-    /**
-     * Return the {@link FieldType} associated with the columnName.
-     */
     public FieldType getFieldTypeByName(String columnName) {
         return fieldNameMap.get(columnName);
     }
 
-    /**
-     * Return the id-field associated with the object.
-     */
     public FieldType getIdField() {
         return idField;
     }
 
-    /**
-     * Return a string representation of the object.
-     */
     public String objectToString(T object) {
         StringBuilder sb = new StringBuilder();
         sb.append(object.getClass().getSimpleName());
@@ -118,9 +85,6 @@ public class TableInfo<T> {
         return sb.toString();
     }
 
-    /**
-     * Create and return an object of this type using our reflection constructor.
-     */
     public T createObject() throws SQLException {
         boolean accessible = constructor.isAccessible();
         try {

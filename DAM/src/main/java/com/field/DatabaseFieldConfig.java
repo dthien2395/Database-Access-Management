@@ -53,11 +53,6 @@ public class DatabaseFieldConfig {
         this.format = format;
     }
 
-    /**
-     * @deprecated Use
-     *             {@link #DatabaseFieldConfig(String, String, DataType, String, int, boolean, boolean, boolean, String, boolean, DatabaseTableConfig, boolean, Enum, boolean, String)}
-     */
-    @Deprecated
     public DatabaseFieldConfig(String fieldName, String columnName, DataType dataType, String defaultValue, int width,
                                boolean canBeNull, boolean id, boolean generatedId, String generatedIdSequence, boolean foreign,
                                DatabaseTableConfig<?> foreignTableConfig, boolean useGetSet, Enum<?> unknownEnumValue, boolean throwIfNull) {
@@ -207,11 +202,6 @@ public class DatabaseFieldConfig {
         return null;
     }
 
-    /**
-     * Find and return the appropriate getter method for field.
-     *
-     * @return Get method or null if none found.
-     */
     public static Method findGetMethod(Field field, boolean throwExceptions) {
         String methodName = methodFromField(field, "get");
         Method fieldGetMethod;
@@ -235,11 +225,6 @@ public class DatabaseFieldConfig {
         return fieldGetMethod;
     }
 
-    /**
-     * Find and return the appropriate setter method for field.
-     *
-     * @return Set method or null if none found.
-     */
     public static Method findSetMethod(Field field, boolean throwExceptions) {
         String methodName = methodFromField(field, "set");
         Method fieldSetMethod;

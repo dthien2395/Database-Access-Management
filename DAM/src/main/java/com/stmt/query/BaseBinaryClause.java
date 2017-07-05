@@ -22,9 +22,6 @@ abstract class BaseBinaryClause implements NeedsFutureClause {
 		this.right = right;
 	}
 
-	/**
-	 * Append the associated operation to the StringBuilder.
-	 */
 	public abstract StringBuilder appendOperation(StringBuilder sb);
 
 	public StringBuilder appendSql(DatabaseType databaseType, StringBuilder sb, List<SelectArg> columnArgList) {

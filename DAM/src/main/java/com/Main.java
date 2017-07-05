@@ -1,23 +1,14 @@
 package com;
 
-import com.MyDAM.MySQLRepository;
-import com.MyDAM.ShopRepository;
 import com.dao.Dao;
-import com.db.BaseMySQLDatabaseType;
 import com.db.DatabaseType;
-import com.field.DatabaseFieldConfig;
 import com.impl.CarDaoImpl;
 import com.impl.JdbcConnectionSource;
 import com.impl.MySqlDatabaseType;
 import com.model.Car;
-import com.model.Person;
-import com.stmt.PreparedStmt;
 import com.stmt.StatementBuilder;
-import com.stmt.query.In;
 import com.support.ConnectionSource;
-import com.table.DatabaseTableConfig;
 import com.table.TableInfo;
-import com.table.TableUtils;
 
 import java.sql.SQLException;
 

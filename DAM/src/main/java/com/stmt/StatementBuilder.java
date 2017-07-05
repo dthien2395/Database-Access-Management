@@ -54,12 +54,6 @@ public class StatementBuilder<T, ID> {
 		return this;
 	}
 
-	/**
-	 * Add "GROUP BY" clauses to the SQL query statement.
-	 *
-	 * NOTE: Use of this means that the resulting objects may not have a valid ID column value so cannot be deleted or
-	 * updated.
-	 */
 	public StatementBuilder<T, ID> groupBy(String columnName) {
 		verifyColumnName(columnName);
 		groupByList.add(columnName);
@@ -67,48 +61,29 @@ public class StatementBuilder<T, ID> {
 		return this;
 	}
 
-	/**
-	 * Add "ORDER BY" clauses to the SQL query statement.
-	 */
 	public StatementBuilder<T, ID> orderBy(String columnName, boolean ascending) {
 		verifyColumnName(columnName);
 		orderByList.add(new OrderBy(columnName, ascending));
 		return this;
 	}
 
-	/**
-	 * Add "DISTINCT" clause to the SQL query statement.
-	 * 
-	 * NOTE: Use of this means that the resulting objects may not have a valid ID column value so cannot be deleted or
-	 * updated.
-	 */
 	public StatementBuilder<T, ID> distinct() {
 		distinct = true;
 		selectIdColumn = false;
 		return this;
 	}
 
-	/**
-	 * Limit the output to maxRows maximum number of rows. Set to null for no limit (the default). This is implemented
-	 * at the database level either through a LIMIT SQL query addition or a JDBC setMaxRows method call.
-	 */
 	public StatementBuilder<T, ID> limit(Integer maxRows) {
 		limit = maxRows;
 		return this;
 	}
 
-	/**
-	 * Returns a {@link Where} object that should be used to add SQL where clauses to the statement. This will also
-	 * reset the where object so you can use the same query builder with a different where statement.
-	 */
 	public Where where() {
 		where = new Where(tableInfo);
 		return where;
 	}
 
-	/**
-	 * Set the {@link Where} object on the query. This allows someone to use the same Where object on multiple queries.
-	 */
+
 	public void setWhere(Where where) {
 		this.where = where;
 	}
@@ -135,10 +110,6 @@ public class StatementBuilder<T, ID> {
 		return buildSelectString(argFieldTypeList, resultFieldTypeList, selectArgList);
 	}
 
-	/**
-	 * Internal method to build a query while tracking various arguments. Users should use the {@link #prepareQuery()}
-	 * method instead.
-	 */
 	private String buildSelectString(List<FieldType> argFieldTypeList, List<FieldType> resultFieldTypeList,
 			List<SelectArg> selectArgList) {
 		StringBuilder sb = new StringBuilder();

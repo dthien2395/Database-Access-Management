@@ -13,8 +13,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface DatabaseTable {
 
-    /**
-     * The name of the column in the database. If not set then the name is taken from the class name lowercased.
-     */
     String tableName() default "";
 }

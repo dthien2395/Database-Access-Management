@@ -20,10 +20,6 @@ public class MappedDeleteCollection<T, ID> extends BaseMappedStatement<T> {
 		super(tableInfo, statement, argFieldTypeList);
 	}
 
-	/**
-	 * Delete all of the objects in the collection. This builds a {@link MappedDeleteCollection} on the fly because the
-	 * datas could be variable sized.
-	 */
 	public static <T, ID> int deleteObjects(DatabaseType databaseType, TableInfo<T> tableInfo,
 											DatabaseConnection databaseConnection, Collection<T> datas) throws SQLException {
 		MappedDeleteCollection<T, ID> deleteCollection =
@@ -37,10 +33,7 @@ public class MappedDeleteCollection<T, ID> extends BaseMappedStatement<T> {
 		return updateRows(databaseConnection, deleteCollection, fieldObjects);
 	}
 
-	/**
-	 * Delete all of the objects in the collection. This builds a {@link MappedDeleteCollection} on the fly because the
-	 * ids could be variable sized.
-	 */
+
 	public static <T, ID> int deleteIds(DatabaseType databaseType, TableInfo<T> tableInfo,
 			DatabaseConnection databaseConnection, Collection<ID> ids) throws SQLException {
 		MappedDeleteCollection<T, ID> deleteCollection =
@@ -49,9 +42,6 @@ public class MappedDeleteCollection<T, ID> extends BaseMappedStatement<T> {
 		return updateRows(databaseConnection, deleteCollection, idsArray);
 	}
 
-	/**
-	 * This is private because the execute is the only method that should be called here.
-	 */
 	private static <T, ID> MappedDeleteCollection<T, ID> build(DatabaseType databaseType, TableInfo<T> tableInfo,
 			int dataSize) {
 		FieldType idField = tableInfo.getIdField();

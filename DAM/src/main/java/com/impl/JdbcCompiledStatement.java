@@ -63,9 +63,6 @@ public class JdbcCompiledStatement implements CompiledStatement {
         preparedStatement.setMaxRows(max);
     }
 
-    /**
-     * Called by {@link JdbcDatabaseResults#next()} to get more results into the existing ResultSet.
-     */
     boolean getMoreResults() throws SQLException {
         return preparedStatement.getMoreResults();
     }
