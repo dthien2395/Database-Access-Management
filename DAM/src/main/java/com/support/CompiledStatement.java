@@ -16,9 +16,9 @@ public interface CompiledStatement {
 
     public int executeUpdate() throws SQLException;
 
-    public ResultSet executeQuery() throws SQLException;
+    public DatabaseResults executeQuery() throws SQLException;
 
-    public ResultSet getGeneratedKeys() throws SQLException;
+    public DatabaseResults getGeneratedKeys() throws SQLException;
 
     public void close() throws SQLException;
 

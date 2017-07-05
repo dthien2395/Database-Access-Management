@@ -3,6 +3,7 @@ package com.stmt.map;
 
 import com.field.FieldType;
 import com.stmt.GenericRowMapper;
+import com.support.DatabaseResults;
 import com.table.TableInfo;
 
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public abstract class BaseMappedQuery<T> extends BaseMappedStatement<T> implemen
 		this.resultsFieldTypes = resultFieldTypeList.toArray(new FieldType[resultFieldTypeList.size()]);
 	}
 
-	public T mapRow(ResultSet results) throws SQLException {
+	public T mapRow(DatabaseResults results) throws SQLException {
 		// create our instance
 		T instance = tableInfo.createObject();
 		// populate its fields

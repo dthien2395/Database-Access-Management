@@ -6,6 +6,7 @@ import com.dao.CloseableIterator;
 import com.support.CompiledStatement;
 import com.support.ConnectionSource;
 import com.support.DatabaseConnection;
+import com.support.DatabaseResults;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +22,7 @@ public class SelectIterator<T, ID> implements CloseableIterator<T> {
 	private final ConnectionSource connectionSource;
 	private final DatabaseConnection connection;
 	private final CompiledStatement stmt;
-	private final ResultSet results;
+	private final DatabaseResults results;
 	private final GenericRowMapper<T> rowMapper;
 	private final String statement;
 	private boolean closed = false;

@@ -9,6 +9,7 @@ import com.stmt.map.*;
 import com.support.CompiledStatement;
 import com.support.ConnectionSource;
 import com.support.DatabaseConnection;
+import com.support.DatabaseResults;
 import com.table.TableInfo;
 
 import java.sql.ResultSet;
@@ -70,7 +71,7 @@ public class StatementExecutor<T, ID> {
 		CompiledStatement stmt = null;
 		try {
 			stmt = preparedStmt.compile(databaseConnection);
-			ResultSet results = stmt.executeQuery();
+			DatabaseResults results = stmt.executeQuery();
 			if (results.next()) {
 				return preparedStmt.mapRow(results);
 			} else {
@@ -261,7 +262,7 @@ public class StatementExecutor<T, ID> {
 		/**
 		 * Row mapper which handles our String[] raw results.
 		 */
-		public String[] mapRow(ResultSet rs) throws SQLException {
+		public String[] mapRow(DatabaseResults rs) throws SQLException {
 			String[] result = new String[columnN];
 			for (int colC = 0; colC < columnN; colC++) {
 				result[colC] = rs.getString(colC + 1);

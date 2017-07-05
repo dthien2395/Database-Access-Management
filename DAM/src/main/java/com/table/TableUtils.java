@@ -7,6 +7,7 @@ import com.misc.SqlExceptionUtil;
 import com.support.CompiledStatement;
 import com.support.ConnectionSource;
 import com.support.DatabaseConnection;
+import com.support.DatabaseResults;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,20 +28,19 @@ public class TableUtils {
 	private TableUtils() {
 	}
 
-	public static <T> int createTable(DatabaseType databaseType, ConnectionSource connectionSource, Class<T> dataClass)
+	public static <T> int createTable(DatabaseType databaseType, DatabaseConnection connection, Class<T> dataClass)
 			throws SQLException {
-		return createTable(databaseType, connectionSource, DatabaseTableConfig.fromClass(databaseType, dataClass));
+		return createTable(databaseType, connection, DatabaseTableConfig.fromClass(databaseType, dataClass));
 	}
 
 
-	public static <T> int createTable(DatabaseType databaseType, ConnectionSource connectionSource,
+	public static <T> int createTable(DatabaseType databaseType, DatabaseConnection connection,
 			DatabaseTableConfig<T> tableConfig) throws SQLException {
 		TableInfo<T> tableInfo = new TableInfo<T>(databaseType, tableConfig);
 		List<String> statements = new ArrayList<String>();
 		List<String> queriesAfter = new ArrayList<String>();
 		createTableStatements(databaseType, tableInfo, statements, queriesAfter);
 		int stmtC = 0;
-		DatabaseConnection connection = connectionSource.getReadWriteConnection();
 		for (String statement : statements) {
 			int rowC;
 			CompiledStatement prepStmt = null;
@@ -67,7 +67,7 @@ public class TableUtils {
 		// now execute any test queries which test the newly created table
 		for (String query : queriesAfter) {
 			CompiledStatement prepStmt = null;
-			ResultSet results = null;
+			DatabaseResults results = null;
 			try {
 				prepStmt = connection.compileStatement(query);
 				results = prepStmt.executeQuery();

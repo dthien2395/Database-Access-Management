@@ -5,10 +5,10 @@ import com.field.DatabaseField;
 import com.table.DatabaseTable;
 
 /**
- * Created by DangThiHien on 04/07/2017.
+ * Created by DangThiHien on 05/07/2017.
  */
-@DatabaseTable(tableName = "car")
-public class Car {
+@DatabaseTable(tableName = "person")
+public class Person {
 
     @DatabaseField(generatedId = true)
     private Integer id;
@@ -30,13 +30,5 @@ public class Car {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

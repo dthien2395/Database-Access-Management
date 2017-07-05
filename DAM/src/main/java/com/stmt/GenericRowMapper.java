@@ -1,5 +1,7 @@
 package com.stmt;
 
+import com.support.DatabaseResults;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -8,6 +10,6 @@ import java.sql.SQLException;
  */
 public interface GenericRowMapper<T> {
 
-    public T mapRow(ResultSet results) throws SQLException;
+    public T mapRow(DatabaseResults results) throws SQLException;
 
 }

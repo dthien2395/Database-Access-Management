@@ -1,6 +1,7 @@
 package com.field;
 
-import java.sql.ResultSet;
+import com.support.DatabaseResults;
+
 import java.sql.SQLException;
 
 /**
@@ -13,7 +14,7 @@ public interface FieldConverter {
     public Object javaToArg(FieldType fieldType, Object obj) throws SQLException;
 
 
-    public Object resultToJava(FieldType fieldType, ResultSet results, int columnPos) throws SQLException;
+    public Object resultToJava(FieldType fieldType, DatabaseResults results, int columnPos) throws SQLException;
 
 
     public SqlType getSqlType();

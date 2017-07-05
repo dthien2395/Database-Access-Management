@@ -3,9 +3,9 @@ package com.db;
 import com.field.FieldConverter;
 import com.field.FieldType;
 import com.field.SqlType;
+import com.support.DatabaseResults;
 
 import java.sql.Driver;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -351,7 +351,7 @@ public abstract class BaseDatabaseType implements DatabaseType{
             Boolean bool = (Boolean) obj;
             return (bool ? new Byte((byte) 1) : new Byte((byte) 0));
         }
-        public Object resultToJava(FieldType fieldType, ResultSet results, int columnPos) throws SQLException {
+        public Object resultToJava(FieldType fieldType, DatabaseResults results, int columnPos) throws SQLException {
             byte result = results.getByte(columnPos);
             return (result == 1 ? (Boolean) true : (Boolean) false);
         }

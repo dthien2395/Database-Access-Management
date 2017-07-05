@@ -2,6 +2,7 @@ package com.field;
 
 import com.db.DatabaseType;
 import com.misc.SqlExceptionUtil;
+import com.support.DatabaseResults;
 import com.table.DatabaseTableConfig;
 import com.table.TableInfo;
 
@@ -409,18 +410,18 @@ public class FieldType {
     /**
      * Get the result object from the results. A call through to {@link FieldConverter#resultToJava}.
      */
-    public <T> T resultToJava(ResultSet results, Map<String, Integer> columnPositions) throws SQLException {
+    public <T> T resultToJava(DatabaseResults results, Map<String, Integer> columnPositions) throws SQLException {
         Integer dbColumnPos = columnPositions.get(dbColumnName);
         if (dbColumnPos == null) {
             dbColumnPos = results.findColumn(dbColumnName);
             columnPositions.put(dbColumnName, dbColumnPos);
         }
         if (dataType.isPrimitive()) {
-            if (throwIfNull && results.getObject(dbColumnPos) == null) {
+            if (throwIfNull && results.isNull(dbColumnPos)) {
                 throw new SQLException("Results value for primitive field '" + fieldName
                         + "' was an invalid null value");
             }
-        } else if (!fieldConverter.isStreamType() && results.getObject(dbColumnPos) == null) {
+        } else if (!fieldConverter.isStreamType() && results.isNull(dbColumnPos)) {
             // we can't check if we have a null if this is a stream type
             return null;
         }
